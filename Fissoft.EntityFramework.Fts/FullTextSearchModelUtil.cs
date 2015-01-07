@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿/*
+ * https://github.com/fissoft/Fissoft.EntityFramework.Fts
+ */
+using System.Linq;
 
 namespace Fissoft.EntityFramework.Fts
 {

@@ -1,4 +1,7 @@
-﻿using System.Data.Entity.Infrastructure.Interception;
+﻿/*
+ * https://github.com/fissoft/Fissoft.EntityFramework.Fts
+ */
+using System.Data.Entity.Infrastructure.Interception;
 
 namespace Fissoft.EntityFramework.Fts
 {
