@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Fissoft.EntityFramework.Fts</id>
+    <version>$version$</version>
+    <title>Fissoft.EntityFramework.Fts</title>
+    <authors>Zou Jian</authors>
+    <owners>chsword</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>EntityFramework SQL Server FullTextSearch</description>
+    <copyright>Copyright ©  2015</copyright>
+    <projectUrl>https://github.com/fissoft/Fissoft.EntityFramework.Fts</projectUrl>
+    <dependencies>
+      <dependency id="EntityFramework" version="6.1.2" />
+    </dependencies>
+  </metadata>
+</package>
