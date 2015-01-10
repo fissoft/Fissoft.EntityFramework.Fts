@@ -9,7 +9,7 @@
     <copyright>Copyright © 2015</copyright>
     <projectUrl>https://github.com/fissoft/Fissoft.EntityFramework.Fts</projectUrl>
     <description>Entity Framework FullTextSearch Uitl</description>
-    <tags>fulltextsearch,entityframework,ef,fts,sql,sqlserver,mssql</tags>
+    <tags>fulltextsearch,entityframework,sqlserver</tags>
     <dependencies>
       <dependency id="EntityFramework" version="6.1.2" />
     </dependencies>
