@@ -2,7 +2,10 @@
 Full Text Search for Microsoft SQL Server with Entity Framework
 
 ## NuGet Install
-[![install from nuget](http://img.shields.io/nuget/v/Fissoft.EntityFramework.Fts.svg?style=flat-square)](https://www.nuget.org/packages/Fissoft.EntityFramework.Fts)[![downloads](http://img.shields.io/nuget/dt/Fissoft.EntityFramework.Fts.svg?style=flat-square)](https://www.nuget.org/packages/Fissoft.EntityFramework.Fts)
+[![install from nuget](http://img.shields.io/nuget/v/Fissoft.EntityFramework.Fts.svg?style=flat-square)](https://www.nuget.org/packages/Fissoft.EntityFramework.Fts)
+[![downloads](http://img.shields.io/nuget/dt/Fissoft.EntityFramework.Fts.svg?style=flat-square)](https://www.nuget.org/packages/Fissoft.EntityFramework.Fts)
+[![release](https://img.shields.io/github/release/fissoft/Fissoft.EntityFramework.Fts.svg?style=flat-square)](https://github.com/fissoft/Fissoft.EntityFramework.Fts/releases)
+
 
 ``` powershell
 PM> Install-Package Fissoft.EntityFramework.Fts
