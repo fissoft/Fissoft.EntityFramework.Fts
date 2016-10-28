@@ -35,7 +35,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>fissoft.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>fissoft.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -62,7 +62,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Fissoft.EntityFramework.Fts.nuspec" />
-    <None Include="fissoft.pfx" />
+    <None Include="fissoft.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
