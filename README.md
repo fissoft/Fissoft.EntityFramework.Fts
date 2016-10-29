@@ -18,9 +18,21 @@ Execute init code on start or static ctor.
 ```
 When search you can use the code following.
 ``` c#
-    db.Tables.Where(c=>c.Fullname.Contains(FullTextSearchModelUtil.Contains("code")));
-    db.Tables.Where(c=>c.Fullname.Contains(FullTextSearchModelUtil.FreeText("code ef")));
-    db.Tables.Where(c=>"*".Contains(FullTextSearchModelUtil.ContainsAll("code ef")));
-    db.Tables.Where(c=>"*".Contains(FullTextSearchModelUtil.FreeTextAll("code ef")));
+    var text = FullTextSearchModelUtil.Contains("code");
+    db.Tables.Where(c=>c.Fullname.Contains(text));
 ```
+``` C#
+    var text = FullTextSearchModelUtil.FreeText("code ef");
+    db.Tables.Where(c=>c.Fullname.Contains(text));
+```
+``` C#
+    var text = FullTextSearchModelUtil.ContainsAll("code ef");
+    db.Tables.Where(c=>"*".Contains(text));
+```
+``` C#
+    var text = FullTextSearchModelUtil.FreeTextAll("code ef");
+    db.Tables.Where(c=>"*".Contains(text));
+```
+    
+    
   
