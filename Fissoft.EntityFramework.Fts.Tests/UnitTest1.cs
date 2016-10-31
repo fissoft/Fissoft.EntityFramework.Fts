@@ -35,6 +35,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 var text = FullTextSearchModelUtil.Contains("a");
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
+        
                     .ToList();
                 
             }
