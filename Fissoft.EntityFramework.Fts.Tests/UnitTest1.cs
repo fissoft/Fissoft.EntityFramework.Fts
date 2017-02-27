@@ -40,5 +40,24 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 
             }
         }
+
+        [TestMethod]
+        public void MyTestMethod_MultiWords()
+        {
+
+            using (var db = new MyDbContext())
+            {
+                db.Database.Log = (s =>
+                {
+                    Console.WriteLine(s);
+                });
+                var text = FullTextSearchModelUtil.Contains("a b",true);
+                var query = db.TestModel
+                    .Where(c => c.Name.Contains(text))
+
+                    .ToList(); // Should return results that contain BOTH words. For the second param = false, should return records with either of the words
+
+            }
+        }
     }
 }
