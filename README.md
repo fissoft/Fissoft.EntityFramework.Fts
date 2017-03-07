@@ -33,6 +33,8 @@ When search you can use the code following.
     var text = FullTextSearchModelUtil.FreeTextAll("code ef");
     db.Tables.Where(c=>"*".Contains(text));
 ```
-    
-    
-  
+``` C#
+    var text = FullTextSearchModelUtil.Contains("a b",true);
+    var query = db.TestModel.Where(c => c.Name.Contains(text)).ToList(); 
+    // Should return results that contain BOTH words. For the second param = false, should return records with either of the words
+```
