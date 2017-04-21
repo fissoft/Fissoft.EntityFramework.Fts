@@ -167,7 +167,6 @@ namespace Fissoft.EntityFramework.Fts
                                 value)
                             );
                     }
-
                 }
                 cmd.CommandText = text;
             }
