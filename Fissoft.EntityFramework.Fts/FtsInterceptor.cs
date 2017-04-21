@@ -144,7 +144,6 @@ namespace Fissoft.EntityFramework.Fts
                                 value)
                             );
                     }
-
                 }
                 var regex1 = new Regex(string.Format(
                     @"(\[\w*\].\[\w*\]\s*)\s*LIKE\s*N'%\({0}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?",
