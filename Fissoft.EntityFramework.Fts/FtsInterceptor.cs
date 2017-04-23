@@ -65,9 +65,7 @@ namespace Fissoft.EntityFramework.Fts
                         // remove %% escaping by linq translator from string.Contains to sql LIKE
                         parameter.Value = value;
                         cmd.CommandText = Regex.Replace(text,
-                            string.Format(
-                                @"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{0}\s?(?:ESCAPE N?'~')",
-                                parameter.ParameterName),
+                            $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
                             string.Format(@"contains([$1].[$2], @{0})",
                                 parameter.ParameterName));
                         if (text == cmd.CommandText)
@@ -97,9 +95,7 @@ namespace Fissoft.EntityFramework.Fts
         {
             var b = text.Contains(flag);
             if (!b) return text;
-            var regex = new Regex(string.Format(
-                @"N'\*'\s*LIKE\s*N'%\({0}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?",
-                flag), RegexOptions.Compiled);
+            var regex = new Regex($@"N'\*'\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
             var matchs = regex.Matches(text);
             foreach (Match match in matchs)
             {
@@ -111,7 +107,7 @@ namespace Fissoft.EntityFramework.Fts
                         value = value.Replace("~", "");
                     }
                     text = text.Replace(match.Value,
-                        string.Format(@"CONTAINS(*, N'{0}')", value)
+                        $@"CONTAINS(*, N'{value}')"
                         );
                 }
             }
@@ -123,9 +119,7 @@ namespace Fissoft.EntityFramework.Fts
             var text = cmd.CommandText;
             if (text.Contains(flag))
             {
-                var regex = new Regex(string.Format(
-                    @"\((\[\w*\]\.\[\w*\]\s*[\+]*\s*)+\s*LIKE\s*N'%\({0}\s?([^\)]+)\)%'\)\s?(ESCAPE N?'~')?",
-                    flag), RegexOptions.Compiled);
+                var regex = new Regex($@"\((\[\w*\]\.\[\w*\]\s*[\+]*\s*)+\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\)\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
                 var matchs = regex.Matches(text);
                 foreach (Match match in matchs)
                 {
@@ -139,15 +133,11 @@ namespace Fissoft.EntityFramework.Fts
                         var fields = match.Groups[0].Value.Trim('(')
                             .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
-                            string.Format(@"(CONTAINS(({0}), N'{1}'))",
-                                fields.Replace('+', ',').Trim(),
-                                value)
+                            $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
                     }
                 }
-                var regex1 = new Regex(string.Format(
-                    @"(\[\w*\].\[\w*\]\s*)\s*LIKE\s*N'%\({0}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?",
-                    flag), RegexOptions.Compiled);
+                var regex1 = new Regex($@"(\[\w*\].\[\w*\]\s*)\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
                 var matchs1 = regex1.Matches(text);
                 foreach (Match match in matchs1)
                 {
@@ -161,9 +151,7 @@ namespace Fissoft.EntityFramework.Fts
                         var fields = match.Groups[0].Value.Trim('(')
                             .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
-                            string.Format(@"(CONTAINS(({0}), N'{1}'))",
-                                fields.Replace('+', ',').Trim(),
-                                value)
+                            $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
                     }
                 }
