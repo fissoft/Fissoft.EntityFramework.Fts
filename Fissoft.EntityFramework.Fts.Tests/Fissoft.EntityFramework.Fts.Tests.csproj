@@ -60,6 +60,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Models\MyDbContext.cs" />
+    <Compile Include="Models\TestModel.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
