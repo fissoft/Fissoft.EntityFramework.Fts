@@ -6,7 +6,6 @@ namespace Fissoft.EntityFramework.Fts.Tests.Models
     {
         public MyDbContext() : base("DefaultConnection")
         {
-
         }
 
         public DbSet<TestModel> TestModel { get; set; }
