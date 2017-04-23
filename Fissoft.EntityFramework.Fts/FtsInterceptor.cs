@@ -66,8 +66,7 @@ namespace Fissoft.EntityFramework.Fts
                         parameter.Value = value;
                         cmd.CommandText = Regex.Replace(text,
                             $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
-                            string.Format(@"contains([$1].[$2], @{0})",
-                                parameter.ParameterName));
+                            $@"contains([$1].[$2], @{parameter.ParameterName})");
                         if (text == cmd.CommandText)
                             throw new Exception("FTS was not replaced on: " + text);
                         text = cmd.CommandText;
