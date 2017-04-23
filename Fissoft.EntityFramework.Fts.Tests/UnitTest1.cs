@@ -26,7 +26,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
         {
             using (var db = new MyDbContext())
             {
-                db.Database.Log = (Console.WriteLine);
+                db.Database.Log = Console.WriteLine;
                 var text = FullTextSearchModelUtil.Contains("a");
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
@@ -39,7 +39,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
         {
             using (var db = new MyDbContext())
             {
-                db.Database.Log = (Console.WriteLine);
+                db.Database.Log = Console.WriteLine;
                 var text = FullTextSearchModelUtil.Contains("a b", true);
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
