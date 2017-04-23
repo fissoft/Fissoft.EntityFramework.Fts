@@ -49,18 +49,18 @@ namespace Fissoft.EntityFramework.Fts
             {
                 DbParameter parameter = cmd.Parameters[i];
                 if (
-                    new[] {DbType.String, DbType.AnsiString, DbType.StringFixedLength, DbType.AnsiStringFixedLength}
+                    new[] { DbType.String, DbType.AnsiString, DbType.StringFixedLength, DbType.AnsiStringFixedLength }
                         .Contains(parameter.DbType))
                 {
                     if (parameter.Value == DBNull.Value)
                         continue;
-                    var value = (string) parameter.Value;
+                    var value = (string)parameter.Value;
                     if (value.IndexOf(FullTextSearchModelUtil.FullTextContains) >= 0)
                     {
                         parameter.Size = 4096;
                         parameter.DbType = DbType.AnsiStringFixedLength;
                         value = value.Replace(FullTextSearchModelUtil.FullTextContains, "");
-                            // remove prefix we added n linq query
+                        // remove prefix we added n linq query
                         value = value.Substring(1, value.Length - 2);
                         // remove %% escaping by linq translator from string.Contains to sql LIKE
                         parameter.Value = value;
@@ -131,7 +131,7 @@ namespace Fissoft.EntityFramework.Fts
                             value = value.Replace("~", "");
                         }
                         var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
+                            .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
                             $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
@@ -149,7 +149,7 @@ namespace Fissoft.EntityFramework.Fts
                             value = value.Replace("~", "");
                         }
                         var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
+                            .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
                             $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
