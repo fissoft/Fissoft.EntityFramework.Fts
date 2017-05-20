@@ -2,6 +2,7 @@
  * https://github.com/fissoft/Fissoft.EntityFramework.Fts
  */
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
@@ -42,79 +43,40 @@ namespace Fissoft.EntityFramework.Fts
 
         #endregion
 
+        private static Dictionary<string, FtsSetting> Dict = new Dictionary<string, FtsSetting>()
+        {
+            {
+                FullTextSearchModelUtil.FullTextContains, new FtsSetting
+                {
+                    KeyWord = "CONTAINS",
+                    Property = "[$1].[$2]"
+                }
+            },
+            {FullTextSearchModelUtil.FullTextContainsAll, new FtsSetting {KeyWord = "CONTAINS", Property = "*"}},
+            {
+                FullTextSearchModelUtil.FullTextFreeText, new FtsSetting
+                {
+                    KeyWord = "FREETEXT",
+                    Property = "[$1].[$2]"
+                }
+            },
+            {FullTextSearchModelUtil.FullTextFreeTextAll, new FtsSetting {KeyWord = "FREETEXT", Property = "*"}},
+        };
+
         public static void RewriteFullTextQuery(DbCommand cmd)
         {
-            string text = cmd.CommandText;
-            for (int i = 0; i < cmd.Parameters.Count; i++)
-            {
-                DbParameter parameter = cmd.Parameters[i];
-                if (
-                    new[] { DbType.String, DbType.AnsiString, DbType.StringFixedLength, DbType.AnsiStringFixedLength }
-                        .Contains(parameter.DbType))
-                {
-                    if (parameter.Value == DBNull.Value)
-                        continue;
-                    var value = (string)parameter.Value;
-                    if (value.IndexOf(FullTextSearchModelUtil.FullTextContains) >= 0)
-                    {
-                        parameter.Size = 4096;
-                        parameter.DbType = DbType.AnsiStringFixedLength;
-                        value = value.Replace(FullTextSearchModelUtil.FullTextContains, "");
-                        // remove prefix we added n linq query
-                        value = value.Substring(1, value.Length - 2);
-                        // remove %% escaping by linq translator from string.Contains to sql LIKE
-                        parameter.Value = value;
-                        cmd.CommandText = Regex.Replace(text,
-                            $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
-                            $@"contains([$1].[$2], @{parameter.ParameterName})");
-                        if (text == cmd.CommandText)
-                            throw new Exception("FTS was not replaced on: " + text);
-                        text = cmd.CommandText;
-                    }
-                }
-            }
-
             ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextContains);
             ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextFreeText);
-            ReplaceAll(cmd, FullTextSearchModelUtil.FullTextFreeTextAll);
-            ReplaceAll(cmd, FullTextSearchModelUtil.FullTextContainsAll);
+            ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextFreeTextAll);
+            ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextContainsAll);
         }
-
-        private static void ReplaceAll(DbCommand cmd, string flag)
-        {
-            var text = cmd.CommandText;
-            var b = ReplaceAllStr(flag, text);
-            if (text != b)
-            {
-                cmd.CommandText = b;
-            }
-        }
-
-        public static string ReplaceAllStr(string flag, string text)
-        {
-            var b = text.Contains(flag);
-            if (!b) return text;
-            var regex = new Regex($@"N'\*'\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
-            var matchs = regex.Matches(text);
-            foreach (Match match in matchs)
-            {
-                if (match.Success)
-                {
-                    var value = match.Groups[1].Value;
-                    if (match.Groups.Count > 2 && match.Groups[2].Value.StartsWith("ESCAPE"))
-                    {
-                        value = value.Replace("~", "");
-                    }
-                    text = text.Replace(match.Value,
-                        $@"CONTAINS(*, N'{value}')"
-                        );
-                }
-            }
-            return text;
-        }
+ 
+ 
 
         private static void ReplaceProperty(DbCommand cmd, string flag)
         {
+            var setting = Dict[flag];
+            var keyword = setting.KeyWord;
             var text = cmd.CommandText;
             if (text.Contains(flag))
             {
@@ -132,7 +94,7 @@ namespace Fissoft.EntityFramework.Fts
                         var fields = match.Groups[0].Value.Trim('(')
                             .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
-                            $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
+                            $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
                     }
                 }
@@ -150,12 +112,52 @@ namespace Fissoft.EntityFramework.Fts
                         var fields = match.Groups[0].Value.Trim('(')
                             .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
-                            $@"(CONTAINS(({fields.Replace('+', ',').Trim()}), N'{value}'))"
+                            $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                             );
                     }
                 }
-                cmd.CommandText = text;
+               
             }
+            for (int i = 0; i < cmd.Parameters.Count; i++)
+            {
+                DbParameter parameter = cmd.Parameters[i];
+                if (
+                    new[]
+                        {
+                            DbType.String,
+                            DbType.AnsiString,
+                            DbType.StringFixedLength,
+                            DbType.AnsiStringFixedLength
+                        }
+                        .Contains(parameter.DbType))
+                {
+                    if (parameter.Value == DBNull.Value)
+                        continue;
+                    var value = (string)parameter.Value;
+                    if (value.IndexOf(flag) >= 0)
+                    {
+                        parameter.Size = 4096;
+                        parameter.DbType = DbType.AnsiStringFixedLength;
+                        value = value.Replace(flag, "");
+                        // remove prefix we added n linq query
+                        value = value.Substring(1, value.Length - 2);
+                        // remove %% escaping by linq translator from string.Contains to sql LIKE
+                        parameter.Value = value;
+                        text = Regex.Replace(text,
+                            $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
+                            $@"{keyword}({setting.Property}, @{parameter.ParameterName})");
+                        if (text == cmd.CommandText)
+                            throw new Exception("FTS was not replaced on: " + text);
+                    }
+                }
+            }
+            cmd.CommandText = text;
         }
+    }
+
+    internal class FtsSetting
+    {
+        public string KeyWord { get; set; }
+        public string Property { get; set; }
     }
 }

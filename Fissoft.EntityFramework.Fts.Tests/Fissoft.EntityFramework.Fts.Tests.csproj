@@ -59,10 +59,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Issue5.cs" />
+    <Compile Include="ConsoleUtil.cs" />
+    <Compile Include="FreeTextTest.cs" />
+    <Compile Include="Issue4Test.cs" />
+    <Compile Include="Issue5Test.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Models\TestModel.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ContainsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
