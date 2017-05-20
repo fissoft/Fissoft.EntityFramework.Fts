@@ -8,6 +8,11 @@ namespace Fissoft.EntityFramework.Fts.Tests
     [TestClass]
     public class Issue4Test
     {
+        [TestInitialize]
+        public void Init()
+        {
+            DbInterceptors.Init();
+        }
         [TestMethod]
         public void Contains_UsingSpecialCharacters_Succeeds()
         {
