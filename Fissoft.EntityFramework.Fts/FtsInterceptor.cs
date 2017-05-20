@@ -46,21 +46,37 @@ namespace Fissoft.EntityFramework.Fts
         private static readonly Dictionary<string, FtsSetting> SettingDict = new Dictionary<string, FtsSetting>()
         {
             {
-                FullTextSearchModelUtil.FullTextContains, new FtsSetting
+                FullTextSearchModelUtil.FullTextContains,
+                new FtsSetting
                 {
                     KeyWord = "CONTAINS",
                     Property = "[$1].[$2]"
                 }
             },
-            {FullTextSearchModelUtil.FullTextContainsAll, new FtsSetting {KeyWord = "CONTAINS", Property = "*"}},
             {
-                FullTextSearchModelUtil.FullTextFreeText, new FtsSetting
+                FullTextSearchModelUtil.FullTextContainsAll,
+                new FtsSetting
+                {
+                    KeyWord = "CONTAINS",
+                    Property = "*"
+                }
+            },
+            {
+                FullTextSearchModelUtil.FullTextFreeText,
+                new FtsSetting
                 {
                     KeyWord = "FREETEXT",
                     Property = "[$1].[$2]"
                 }
             },
-            {FullTextSearchModelUtil.FullTextFreeTextAll, new FtsSetting {KeyWord = "FREETEXT", Property = "*"}},
+            {
+                FullTextSearchModelUtil.FullTextFreeTextAll,
+                new FtsSetting
+                {
+                    KeyWord = "FREETEXT",
+                    Property = "*"
+                }
+            },
         };
 
         public static void RewriteFullTextQuery(DbCommand cmd)
@@ -116,7 +132,6 @@ namespace Fissoft.EntityFramework.Fts
                             );
                     }
                 }
-               
             }
             for (int i = 0; i < cmd.Parameters.Count; i++)
             {
