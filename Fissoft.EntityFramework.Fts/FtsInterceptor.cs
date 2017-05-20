@@ -86,8 +86,6 @@ namespace Fissoft.EntityFramework.Fts
             ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextFreeTextAll);
             ReplaceProperty(cmd, FullTextSearchModelUtil.FullTextContainsAll);
         }
- 
- 
 
         private static void ReplaceProperty(DbCommand cmd, string flag)
         {
