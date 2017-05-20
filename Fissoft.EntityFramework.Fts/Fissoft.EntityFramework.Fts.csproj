@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FtsSetting.cs" />
     <Compile Include="FullTextSearchModelUtil.cs" />
     <Compile Include="DbInterceptors.cs" />
     <Compile Include="FtsInterceptor.cs" />

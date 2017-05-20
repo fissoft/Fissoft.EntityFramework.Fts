@@ -43,7 +43,7 @@ namespace Fissoft.EntityFramework.Fts
 
         #endregion
 
-        private static Dictionary<string, FtsSetting> Dict = new Dictionary<string, FtsSetting>()
+        private static readonly Dictionary<string, FtsSetting> SettingDict = new Dictionary<string, FtsSetting>()
         {
             {
                 FullTextSearchModelUtil.FullTextContains, new FtsSetting
@@ -75,7 +75,7 @@ namespace Fissoft.EntityFramework.Fts
 
         private static void ReplaceProperty(DbCommand cmd, string flag)
         {
-            var setting = Dict[flag];
+            var setting = SettingDict[flag];
             var keyword = setting.KeyWord;
             var text = cmd.CommandText;
             if (text.Contains(flag))
@@ -153,11 +153,5 @@ namespace Fissoft.EntityFramework.Fts
             }
             cmd.CommandText = text;
         }
-    }
-
-    internal class FtsSetting
-    {
-        public string KeyWord { get; set; }
-        public string Property { get; set; }
     }
 }
