@@ -63,6 +63,7 @@
     <Compile Include="FreeTextTest.cs" />
     <Compile Include="Issue4Test.cs" />
     <Compile Include="Issue5Test.cs" />
+    <Compile Include="Issue7Test.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="ContainsTest.cs" />
