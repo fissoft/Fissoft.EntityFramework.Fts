@@ -6,13 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Fissoft.EntityFramework.Fts.Tests
 {
     [TestClass]
-    public class FreeTextTest
+    public class FreeTextTest:TestBase
     {
-        [TestInitialize]
-        public void Init()
-        {
-            DbInterceptors.Init();
-        }
+    
         [TestMethod]
         public void Test()
         {

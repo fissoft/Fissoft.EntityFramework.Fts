@@ -59,7 +59,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConsoleUtil.cs" />
+    <Compile Include="Internal\ConsoleUtil.cs" />
     <Compile Include="FreeTextTest.cs" />
     <Compile Include="Issue10Test.cs" />
     <Compile Include="Issue4Test.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="ContainsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBase.cs" />
+    <Compile Include="Internal\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fissoft.EntityFramework.Fts\Fissoft.EntityFramework.Fts.csproj">

@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Text;
 
 namespace Fissoft.EntityFramework.Fts
 {
@@ -156,9 +157,36 @@ namespace Fissoft.EntityFramework.Fts
                         value = value.Substring(1, value.Length - 2);
                         // remove %% escaping by linq translator from string.Contains to sql LIKE
                         parameter.Value = value;
+                        //text = Regex.Replace(text,
+                        //    $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
+                        //    $@"{keyword}({setting.Property}, @{parameter.ParameterName})");
+
                         text = Regex.Replace(text,
-                            $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
-                            $@"{keyword}({setting.Property}, @{parameter.ParameterName})");
+                            $@"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')", 
+                            (match) =>
+                            {
+                                var sb = new StringBuilder();
+                                
+                                sb.Append(keyword)
+                                    .Append("(");
+                                if (setting.Property == "*")
+                                {
+                                    sb.Append("*");
+                                }
+                                else
+                                {
+                                    sb.Append("(");
+                                    foreach (Capture capture in match.Groups[1].Captures)
+                                    {
+                                        sb.Append(capture.Value.Replace("+", ","));
+                                    }
+                                    sb.Append(")");
+                                }
+                                sb.Append(",@").Append(parameter.ParameterName).Append(")");
+                                //$@"{keyword}({setting.Property}, @{parameter.ParameterName})");
+                                return sb.ToString();
+                            });
+
                         if (text == cmd.CommandText)
                             throw new Exception("FTS was not replaced on: " + text);
                     }
