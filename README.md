@@ -38,3 +38,21 @@ When search you can use the code following.
     var query = db.TestModel.Where(c => c.Name.Contains(text)).ToList(); 
     // Should return results that contain BOTH words. For the second param = false, should return records with either of the words
 ```
+
+Multi field query
+``` c#
+var query = db.TestModel
+                    .Where(c => (c.Name+c.Text).Contains(text))
+                    .ToList();
+```
+
+will generate the sql
+
+``` sql
+SELECT 
+    [Extent1].[Id] AS [Id], 
+    [Extent1].[Text] AS [Text], 
+    [Extent1].[Name] AS [Name]
+    FROM [dbo].[TestModels] AS [Extent1]
+    WHERE CONTAINS(([Extent1].[Name] , [Extent1].[Text] ),@p__linq__0)
+```
