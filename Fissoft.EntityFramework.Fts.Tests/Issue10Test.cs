@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Fissoft.EntityFramework.Fts.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Fissoft.EntityFramework.Fts.Tests
 {
     [TestClass]
-    public class Issue7Test: TestBase
+    public class Issue10Test: TestBase
     {
-   
         [TestMethod]
-        public void Issue7()
+        public void Issue10()
         {
             using (var db = new MyDbContext())
             {
@@ -22,7 +20,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
                     .ToList();
-              
+
             }
         }
     }
