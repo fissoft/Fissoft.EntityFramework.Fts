@@ -56,3 +56,7 @@ SELECT
     FROM [dbo].[TestModels] AS [Extent1]
     WHERE CONTAINS(([Extent1].[Name] , [Extent1].[Text] ),@p__linq__0)
 ```
+
+## Reference:
+
+http://www.entityframework.info/Home/FullTextSearch
