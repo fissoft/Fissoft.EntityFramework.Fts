@@ -27,11 +27,11 @@ When search you can use the code following.
 ```
 ``` C#
     var text = FullTextSearchModelUtil.ContainsAll("code ef");
-    db.Tables.Where(c=>"*".Contains(text));
+    db.Tables.Where(c=>c.Name.Contains(text)); //c.Name could be any string property of model
 ```
 ``` C#
     var text = FullTextSearchModelUtil.FreeTextAll("code ef");
-    db.Tables.Where(c=>"*".Contains(text));
+    db.Tables.Where(c=>c.Name.Contains(text)); //c.Name could be any string property of model
 ```
 ``` C#
     var text = FullTextSearchModelUtil.Contains("a b",true);
