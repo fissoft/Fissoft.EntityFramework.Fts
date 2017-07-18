@@ -121,12 +121,7 @@ namespace Fissoft.EntityFramework.Fts
                         value = value.Replace(flag, "");
                         // remove prefix we added n linq query
                         value = value.Substring(1, value.Length - 2);
-                        // remove %% escaping by linq translator from string.Contains to sql LIKE
                         parameter.Value = value;
-                        //text = Regex.Replace(text,
-                        //    $@"\[(\w*)\].\[(\w*)\]\s*LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')",
-                        //    $@"{keyword}({setting.Property}, @{parameter.ParameterName})");
-
                         text = Regex.Replace(text,
                             $@"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@{
                                     parameter.ParameterName
@@ -149,10 +144,8 @@ namespace Fissoft.EntityFramework.Fts
                                     sb.Append(")");
                                 }
                                 sb.Append(",@").Append(parameter.ParameterName).Append(")");
-                                //$@"{keyword}({setting.Property}, @{parameter.ParameterName})");
                                 return sb.ToString();
                             });
-
                         if (text == cmd.CommandText)
                             throw new Exception("FTS was not replaced on: " + text);
                     }

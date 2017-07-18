@@ -29,9 +29,9 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
                     .ToList();
-                var orWord = FullTextSearchModelUtil.Contains("a b");
+                var text1 = FullTextSearchModelUtil.Contains("a b");
                 var query1 = db.TestModel
-                    .Where(c => c.Name.Contains(orWord))
+                    .Where(c => c.Name.Contains(text1))
                     .ToList();
                 var andWord = FullTextSearchModelUtil.Contains("a b", true);
                 var query2 = db.TestModel
@@ -51,9 +51,9 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 var query = db.TestModel
                     .Where(c => c.Name.Contains(text))
                     .ToList();
-                var orWord = FullTextSearchModelUtil.ContainsAll("a b");
+                var text1 = FullTextSearchModelUtil.ContainsAll("a b");
                 var query1 = db.TestModel
-                    .Where(c => c.Name.Contains(orWord))
+                    .Where(c => c.Name.Contains(text1))
                     .ToList();
                 var andWord = FullTextSearchModelUtil.ContainsAll("a b", true);
                 var query2 = db.TestModel
