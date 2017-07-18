@@ -61,6 +61,7 @@
     <Compile Include="DbInterceptors.cs" />
     <Compile Include="FtsInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

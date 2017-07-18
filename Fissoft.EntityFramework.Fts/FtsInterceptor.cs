@@ -76,8 +76,7 @@ namespace Fissoft.EntityFramework.Fts
                         var value = match.Groups[2].Value;
                         if (match.Groups.Count > 3 && match.Groups[3].Value.StartsWith("ESCAPE"))
                             value = value.Replace("~", "");
-                        var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
+                        var fields = match.Groups[0].Value.Trim('(').GetSplitLikeFirst();
                         text = text.Replace(match.Value,
                             $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                         );
@@ -91,8 +90,7 @@ namespace Fissoft.EntityFramework.Fts
                         var value = match.Groups[2].Value;
                         if (match.Groups.Count > 3 && match.Groups[3].Value.StartsWith("ESCAPE"))
                             value = value.Replace("~", "");
-                        var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
+                        var fields = match.Groups[0].Value.Trim('(').GetSplitLikeFirst();
                         text = text.Replace(match.Value,
                             $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
                         );
@@ -129,9 +127,7 @@ namespace Fissoft.EntityFramework.Fts
                             match =>
                             {
                                 var sb = new StringBuilder();
-
-                                sb.Append(keyword)
-                                    .Append("(");
+                                sb.Append(keyword).Append("(");
                                 if (setting.Property == "*")
                                 {
                                     sb.Append("*");
