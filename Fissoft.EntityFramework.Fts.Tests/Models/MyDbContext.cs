@@ -2,7 +2,7 @@
 
 namespace Fissoft.EntityFramework.Fts.Tests.Models
 {
-    class MyDbContext : DbContext
+    internal class MyDbContext : DbContext
     {
         public MyDbContext() : base("DefaultConnection")
         {

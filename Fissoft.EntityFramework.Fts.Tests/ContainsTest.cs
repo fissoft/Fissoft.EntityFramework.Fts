@@ -6,9 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Fissoft.EntityFramework.Fts.Tests
 {
     [TestClass]
-    public class ContainsTest:TestBase
+    public class ContainsTest : TestBase
     {
- 
         [TestMethod]
         public void TestMethod1()
         {
@@ -17,7 +16,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 db.Database.CreateIfNotExists();
             }
         }
- 
+
         [TestMethod]
         public void TestParameter()
         {
@@ -41,6 +40,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                     ;
             }
         }
+
         [TestMethod]
         public void TestAll()
         {

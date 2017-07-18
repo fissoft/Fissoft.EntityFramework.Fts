@@ -1,50 +1,21 @@
 /*
  * https://github.com/fissoft/Fissoft.EntityFramework.Fts
  */
+
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
-using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Fissoft.EntityFramework.Fts
 {
     public class FtsInterceptor : IDbCommandInterceptor
     {
-        #region interface impl
-
-        public void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
-        {
-        }
-
-        public void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
-        {
-        }
-
-        public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
-        {
-            RewriteFullTextQuery(command);
-        }
-
-        public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
-        {
-        }
-
-        public void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
-        {
-            RewriteFullTextQuery(command);
-        }
-
-        public void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
-        {
-        }
-
-        #endregion
-
-        private static readonly Dictionary<string, FtsSetting> SettingDict = new Dictionary<string, FtsSetting>()
+        private static readonly Dictionary<string, FtsSetting> SettingDict = new Dictionary<string, FtsSetting>
         {
             {
                 FullTextSearchModelUtil.FullTextContains,
@@ -77,7 +48,7 @@ namespace Fissoft.EntityFramework.Fts
                     KeyWord = "FREETEXT",
                     Property = "*"
                 }
-            },
+            }
         };
 
         public static void RewriteFullTextQuery(DbCommand cmd)
@@ -95,46 +66,41 @@ namespace Fissoft.EntityFramework.Fts
             var text = cmd.CommandText;
             if (text.Contains(flag))
             {
-                var regex = new Regex($@"\((\[\w*\]\.\[\w*\]\s*[\+]*\s*)+\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\)\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
+                var regex = new Regex(
+                    $@"\((\[\w*\]\.\[\w*\]\s*[\+]*\s*)+\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\)\s?(ESCAPE N?'~')?",
+                    RegexOptions.Compiled);
                 var matchs = regex.Matches(text);
                 foreach (Match match in matchs)
-                {
                     if (match.Success)
                     {
                         var value = match.Groups[2].Value;
                         if (match.Groups.Count > 3 && match.Groups[3].Value.StartsWith("ESCAPE"))
-                        {
                             value = value.Replace("~", "");
-                        }
                         var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
                             $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
-                            );
+                        );
                     }
-                }
-                var regex1 = new Regex($@"(\[\w*\].\[\w*\]\s*)\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?", RegexOptions.Compiled);
+                var regex1 = new Regex($@"(\[\w*\].\[\w*\]\s*)\s*LIKE\s*N'%\({flag}\s?([^\)]+)\)%'\s?(ESCAPE N?'~')?",
+                    RegexOptions.Compiled);
                 var matchs1 = regex1.Matches(text);
                 foreach (Match match in matchs1)
-                {
                     if (match.Success)
                     {
                         var value = match.Groups[2].Value;
                         if (match.Groups.Count > 3 && match.Groups[3].Value.StartsWith("ESCAPE"))
-                        {
                             value = value.Replace("~", "");
-                        }
                         var fields = match.Groups[0].Value.Trim('(')
-                            .Split(new[] { "like", "LIKE" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                            .Split(new[] {"like", "LIKE"}, StringSplitOptions.RemoveEmptyEntries)[0];
                         text = text.Replace(match.Value,
                             $@"({keyword}(({fields.Replace('+', ',').Trim()}), N'{value}'))"
-                            );
+                        );
                     }
-                }
             }
-            for (int i = 0; i < cmd.Parameters.Count; i++)
+            for (var i = 0; i < cmd.Parameters.Count; i++)
             {
-                DbParameter parameter = cmd.Parameters[i];
+                var parameter = cmd.Parameters[i];
                 if (
                     new[]
                         {
@@ -147,7 +113,7 @@ namespace Fissoft.EntityFramework.Fts
                 {
                     if (parameter.Value == DBNull.Value)
                         continue;
-                    var value = (string)parameter.Value;
+                    var value = (string) parameter.Value;
                     if (value.IndexOf(flag) >= 0)
                     {
                         parameter.Size = 4096;
@@ -162,11 +128,13 @@ namespace Fissoft.EntityFramework.Fts
                         //    $@"{keyword}({setting.Property}, @{parameter.ParameterName})");
 
                         text = Regex.Replace(text,
-                            $@"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@{parameter.ParameterName}\s?(?:ESCAPE N?'~')", 
-                            (match) =>
+                            $@"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@{
+                                    parameter.ParameterName
+                                }\s?(?:ESCAPE N?'~')",
+                            match =>
                             {
                                 var sb = new StringBuilder();
-                                
+
                                 sb.Append(keyword)
                                     .Append("(");
                                 if (setting.Property == "*")
@@ -177,9 +145,7 @@ namespace Fissoft.EntityFramework.Fts
                                 {
                                     sb.Append("(");
                                     foreach (Capture capture in match.Groups[1].Captures)
-                                    {
                                         sb.Append(capture.Value.Replace("+", ","));
-                                    }
                                     sb.Append(")");
                                 }
                                 sb.Append(",@").Append(parameter.ParameterName).Append(")");
@@ -194,5 +160,35 @@ namespace Fissoft.EntityFramework.Fts
             }
             cmd.CommandText = text;
         }
+
+        #region interface impl
+
+        public void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+        {
+        }
+
+        public void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+        {
+        }
+
+        public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        {
+            RewriteFullTextQuery(command);
+        }
+
+        public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+        {
+        }
+
+        public void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
+        {
+            RewriteFullTextQuery(command);
+        }
+
+        public void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
+        {
+        }
+
+        #endregion
     }
 }
