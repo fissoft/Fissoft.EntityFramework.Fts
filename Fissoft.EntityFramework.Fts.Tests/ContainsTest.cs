@@ -23,7 +23,6 @@ namespace Fissoft.EntityFramework.Fts.Tests
             using (var db = new MyDbContext())
             {
                 var first = db.TestModel.FirstOrDefault();
-
                 db.Database.Log = ConsoleUtil.Write;
                 Console.WriteLine("Signle Word");
                 var text = FullTextSearchModelUtil.Contains("a");
@@ -36,8 +35,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                     .ToList();
                 var andWord = FullTextSearchModelUtil.Contains("a b", true);
                 var query2 = db.TestModel
-                        .Where(c => c.Name.Contains(andWord)).ToList()
-                    ;
+                        .Where(c => c.Name.Contains(andWord)).ToList();
             }
         }
 
@@ -47,7 +45,6 @@ namespace Fissoft.EntityFramework.Fts.Tests
             using (var db = new MyDbContext())
             {
                 var first = db.TestModel.FirstOrDefault();
-
                 db.Database.Log = ConsoleUtil.Write;
                 Console.WriteLine("Signle Word");
                 var text = FullTextSearchModelUtil.ContainsAll("a");
@@ -60,8 +57,7 @@ namespace Fissoft.EntityFramework.Fts.Tests
                     .ToList();
                 var andWord = FullTextSearchModelUtil.ContainsAll("a b", true);
                 var query2 = db.TestModel
-                        .Where(c => c.Name.Contains(andWord)).ToList()
-                    ;
+                        .Where(c => c.Name.Contains(andWord)).ToList();
             }
         }
     }
