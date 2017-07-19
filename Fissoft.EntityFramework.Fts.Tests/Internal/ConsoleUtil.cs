@@ -4,7 +4,9 @@ namespace Fissoft.EntityFramework.Fts.Tests
 {
     public class ConsoleUtil
     {
-        public static void Write() { }
+        public static void Write()
+        {
+        }
 
         public static void Write(string str)
         {
