@@ -8,18 +8,19 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Fissoft.EntityFramework.Fts.Tests
 {
     [TestClass]
-    public class Issue10Test: TestBase
+    public class Issue10Test : TestBase
     {
         [TestMethod]
         public void Issue10RegexTest()
         {
-            var sql= @"SELECT 
+            var sql = @"SELECT 
     [Extent1].[Id] AS [Id], 
     [Extent1].[Text] AS [Text], 
     [Extent1].[Name] AS [Name]
     FROM [dbo].[TestModels] AS [Extent1]
     WHERE [Extent1].[Name] + [Extent1].[Text] LIKE @p__linq__0 ESCAPE N'~'";
-            var matches = Regex.Matches(sql, @"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@p__linq__0\s?(?:ESCAPE N?'~')");
+            var matches = Regex.Matches(sql,
+                @"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@p__linq__0\s?(?:ESCAPE N?'~')");
             Console.WriteLine(matches);
             var rep = Regex.Replace(sql,
                 @"(\[(?<t>\w*)\].\[(?<p>\w*)\]\s*\+?\s*)+LIKE\s*@p__linq__0\s?(?:ESCAPE N?'~')", (match) =>
@@ -36,26 +37,24 @@ namespace Fissoft.EntityFramework.Fts.Tests
                 });
             Console.WriteLine(rep);
         }
+
         [TestMethod]
         public void Issue10()
         {
             using (var db = new MyDbContext())
             {
                 var first = db.TestModel.FirstOrDefault();
-
                 db.Database.Log = ConsoleUtil.Write;
                 db.Configuration.UseDatabaseNullSemantics = true;
                 var keyword = "web";
                 var text = FullTextSearchModelUtil.Contains(keyword, true);
                 var queryOrg = db.TestModel
-                    .Where(c => (c.Name +c.Text).Contains(keyword))
+                    .Where(c => (c.Name + c.Text).Contains(keyword))
                     .ToList();
                 var query = db.TestModel
-                    .Where(c => (c.Name+c.Text).Contains(text))
+                    .Where(c => (c.Name + c.Text).Contains(text))
                     .ToList();
-
             }
         }
     }
-
 }
