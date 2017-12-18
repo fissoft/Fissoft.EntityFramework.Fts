@@ -54,7 +54,7 @@ SELECT
     [Extent1].[Text] AS [Text], 
     [Extent1].[Name] AS [Name]
     FROM [dbo].[TestModels] AS [Extent1]
-    WHERE CONTAINS(([Extent1].[Name] , [Extent1].[Text] ),@p__linq__0)
+    WHERE CONTAINS(([Extent1].[Name] , [Extent1].[Text]),@p__linq__0);
 ```
 
 ## Reference:
