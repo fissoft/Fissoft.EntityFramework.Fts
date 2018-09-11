@@ -71,4 +71,4 @@ Install the package ```Microsoft.EntityFrameworkCore.SqlServer```.
    var result = db.TestModel.Where(c => EF.Functions.FreeText(c.Text, "search"));
 ```
 
-(EF.Docs# Use FreeText and soon Contains functions )[https://github.com/aspnet/EntityFramework.Docs/issues/685]
+[EF.Docs# Use FreeText( and soon Contains )functions ](https://github.com/aspnet/EntityFramework.Docs/issues/685)
