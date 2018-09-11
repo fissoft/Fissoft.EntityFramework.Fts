@@ -60,3 +60,12 @@ SELECT
 ## Reference:
 
 http://www.entityframework.info/Home/FullTextSearch
+
+## About .NET Core
+
+In .NET core 2.1 you can use offical freetext method to search.
+Install the packages ```Microsoft.EntityFrameworkCore.SqlServer```.
+```cs
+   using Microsoft.EntityFrameworkCore;
+   var result = db.TestModel.Where(c => EF.Functions.FreeText(c.Text, "search"));
+```
