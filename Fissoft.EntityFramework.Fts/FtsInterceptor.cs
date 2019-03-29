@@ -90,8 +90,8 @@ namespace Fissoft.EntityFramework.Fts
                 var value = (string) parameter.Value;
                 if (value.IndexOf(flag) >= 0)
                 {
-                    parameter.Size = 4096;
-                    parameter.DbType = DbType.AnsiStringFixedLength;
+                    //parameter.Size = 4096;
+                    //parameter.DbType = DbType.AnsiStringFixedLength;
                     value = value.Replace(flag, "");
                     // remove prefix we added n linq query
                     value = value.Substring(1, value.Length - 2);
